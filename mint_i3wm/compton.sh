@@ -5,6 +5,11 @@ then
     sudo apt remove compton compton* -y
 fi
 
+if [ xsltproc ]
+then
+    sudo apt remove xsltproc -y
+fi
+
 dir=~/mint_i3wm
 
 if [ ! -d $dir/compton ]
