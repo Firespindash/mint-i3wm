@@ -1,0 +1,63 @@
+configuration {
+  columns: 1;
+  font: "Mono 12";
+  display-combi: ">";
+}
+
+* {
+    background-color:      rgba(30, 31, 40, 0.5);
+    dark:                  rgba(30, 31, 40, 0.75);
+    ash:                   #aaaaaa;
+    gold:                  #EAD3AA;
+    text-color:            #ffffff;
+}
+
+#window {
+  anchor:     center;
+  location:   center;
+  width:      100%;
+  height:     100%;
+  padding:    200;
+  background-color: @dark;
+}
+
+#mainbox {
+  background-color: transparent;
+  padding: 0;
+}
+
+#inputbar {
+  background-color: transparent;
+  padding: 10;
+}
+
+#prompt {
+  background-color: transparent;
+}
+
+#entry {
+  background-color: transparent;
+  padding: 0 10;
+}
+
+#case-indicator {
+  background-color: transparent;
+}
+
+#listview {
+  background-color: transparent;
+  padding: 10 0;
+}
+
+#element {
+  background-color: transparent;
+  padding: 16 10;
+}
+
+#element selected {
+  text-color: @gold;
+}
+
+#element active {
+  text-color: @ash;
+}
