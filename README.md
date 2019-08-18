@@ -5,7 +5,7 @@ It's a script that install _i3_ with blur effects in your _Linux_ _Mint_
 
 ## Installation
 
-* After cloning, move the mint_i3wm to your home directory(`echo ~`);
+* After cloning, move the mint_i3wm inside of this project directory to your home directory(`echo ~`);
 * go to terminal;
 * type `cd mint_i3wm`; 
 * and run `./install.sh`;
