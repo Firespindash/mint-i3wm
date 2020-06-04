@@ -33,7 +33,7 @@ If you want to use another wallpaper changer instead of nitrogen you can do it. 
 * Then reboot your machine;
 
 Just type 'Y' when the question "Just run specific part?[Y/N] " appears, if something go wrong. You can uninstall some part or some programs using the separated scripts with the flag `-u`. \
-Some programs are downloaded again to uninstall them. Also if you move to other places or rename some directories and files the script will not uninstall them, others will be created again in the default place to remove them. The unused dependencies remaining will be removed with `apt autoremove` automatically.
+Some programs are downloaded again to uninstall them. Also if you move to other places or rename some directories and files, the script will not uninstall them, others will be created again in the default place to remove them. The unused dependencies remaining will be removed with `apt autoremove` automatically.
 
 ## Keyboard
 $mod = Win key
