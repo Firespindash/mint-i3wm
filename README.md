@@ -14,7 +14,7 @@ It's a script that install _i3_ with blur effects in your _Linux_ _Mint_
 Don't type 'Y' when the question "Just run specific part?[Y/N] " appears because this option will run only the part where test which DE you are using and do specific modifications and instructions for it. \
 Just use this option when you already used this script and if something is wrong, you can run one of the separated scripts too. \
 The script may work on the three default Desktop Environments in Linux Mint. (_Cinnamon_, _Mate_ and _Xfce_) \
-You can still install the i3 applet and plugin for _Mate_ and _Xfce_ by yourself, but they aren't brought with the other programs anymore because the `uninstall.sh` script could not uninstall them and _Mate_ applet isn't maintained right now.
+You can still install the i3 applet and plugin for _Mate_ and _Xfce_ by yourself, but they aren't brought with the other programs anymore because the `uninstall.sh` script could not uninstall them and _Mate_ i3 applet isn't maintained right now.
 
 Part of the configuration files are based in Manjaro i3 configuration files and part of the code are based in tutorials from other sites and other projects for github, mentions are inside of the scripts.
 
