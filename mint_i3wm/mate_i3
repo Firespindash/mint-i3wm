@@ -272,7 +272,7 @@ mode "resize" {
 
 # Autostart applications
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-exec --no-startup-id nitrogen --restore ; sleep 1; compton -b #if you want to use feh(/home/yourUser/.fehbg &)
+exec --no-startup-id nitrogen --restore ; sleep 1; compton & #if you want to use feh(/home/yourUser/.fehbg &)
 exec --no-startup-id nm-applet
 exec --no-startup-id xfce4-power-manager
 exec --no-startup-id clipit

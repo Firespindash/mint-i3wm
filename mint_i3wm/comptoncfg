@@ -39,6 +39,7 @@ shadow-exclude = [
 menu-opacity = 0.85;
 inactive-opacity = 0.85;
 active-opacity = 0.85;
+inactive-opactiy-override = false;
 alpha-step = 0.01;
 blur-background = true;
 blur-background-frame = true;
