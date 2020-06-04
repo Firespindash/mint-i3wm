@@ -13,7 +13,8 @@ It's a script that install _i3_ with blur effects in your _Linux_ _Mint_
 
 Don't type 'Y' when the question "Just run specific part?[Y/N] " appears because this option will run only the part where test which DE you are using and do specific modifications and instructions for it. \
 Just use this option when you already used this script and if something is wrong, you can run one of the separated scripts too. \
-The script may work on the three default Desktop Environments in Linux Mint. (_Cinnamon_, _Mate_ and _Xfce_)
+The script may work on the three default Desktop Environments in Linux Mint. (_Cinnamon_, _Mate_ and _Xfce_) \
+You can still install the i3 applet and plugin for _Mate_ and _Xfce_, but they aren't brought with the other programs anymore because the `uninstall.sh` script could not uninstall them and _Mate_ applet isn't maintained right now.
 
 Part of the configuration files are based in Manjaro i3 configuration files and part of the code are based in tutorials from other sites and other projects for github, mentions are inside of the scripts.
 
@@ -21,9 +22,17 @@ Part of the configuration files are based in Manjaro i3 configuration files and 
 
 If you are in Cinnamon, in login screen click in _Cinnamon_ Logo and change to _Cinnamon+i3_, I recommend you to use _polybar_ or _synaptic_ to find program names or to have access to them more easily.
 
-If you have a problem in the installation or with a dependence issue, you just need to run a separate script again or remove the dependence and install again. 
+If you have a problem in the installation or with a dependence issue, you just need to run a separated script again or remove the dependence and install again with the flag `-i`. 
 
 If you want to use another wallpaper changer instead of nitrogen you can do it. I recommend that you use a dark theme for better look and feel and change the wallpaper, for this use the command `nitrogen /your/path/ --set-zoom-fill` or `nitrogen /usr/share/backgrounds/linuxmint-tina/`.
+
+## Uninstallation
+
+* If you haven't anymore, clone it again and move the mint_i3wm directory to your home directory(`cp -r mint_i3wm ~/`);
+* go to terminal, type `cd mint_i3wm` and run `./uninstall.sh`;
+* Then reboot your machine;
+
+Just type 'Y' when the question "Just run specific part?[Y/N] " appears, if something go wrong. You can uninstall some part or some programs using the separated scripts with the flag `-u`.
 
 ## Keyboard
 $mod = Win key
@@ -46,6 +55,7 @@ $mod = Win key
 * $Mod+Shift+r Reload i3
 * $mod+Shift+Space Change focus tiling/float
 * $mod+f Change to fullscreen
+* $mod+m Unhide/hide i3bar
 
 ## More Images
 
