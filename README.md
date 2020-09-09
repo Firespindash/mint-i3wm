@@ -1,5 +1,5 @@
 # mint_i3wm
-It's a script that install _i3_ with blur effects in your _Linux_ _Mint_
+It's a script that install _i3_ with blur effects in your _Linux Mint_
 
 ![Cinnamon](cinnamon.jpg)
 
@@ -13,18 +13,18 @@ It's a script that install _i3_ with blur effects in your _Linux_ _Mint_
 
 Don't type 'Y' when the question "Just run specific part?[Y/N] " appears because this option will run only the part where test which DE you are using and do specific modifications and instructions for it. \
 Just use this option when you already used this script and if something is wrong, you can run one of the separated scripts too. \
-The script may work on the three default Desktop Environments in Linux Mint. (_Cinnamon_, _Mate_ and _Xfce_) \
-You can still install the i3 applet and plugin for _Mate_ and _Xfce_ by yourself, but they aren't brought with the other programs anymore because the `uninstall.sh` script could not uninstall them and _Mate_ i3 applet isn't maintained right now.
+The script may work on the three default Desktop Environments in _Linux Mint_. (_Cinnamon_, _Mate_ and _Xfce_) \
+You can still install the i3 applet and plugin for _Mate_ and _Xfce_ by yourself, but they aren't brought with the other programs anymore because the `uninstall.sh` script could not uninstall them and _Mate_ _i3_ applet isn't maintained right now.
 
-Part of the configuration files are based in Manjaro i3 configuration files and part of the code are based in tutorials from other sites and other projects for github, mentions are inside of the scripts.
+Part of the configuration files are based in _Manjaro i3_ configuration files and part of the code are based in tutorials from other sites and other projects for github, mentions are inside of the scripts.
 
 ## Pos-Installation
 
-If you are in Cinnamon, in login screen click in _Cinnamon_ Logo and change to _Cinnamon+i3_, I recommend you to use _polybar_ or _synaptic_ to find program names or to have access to them more easily.
+If you are in _Cinnamon_, in login screen click in _Cinnamon_ Logo and change to _Cinnamon+i3_, I recommend you to use _polybar_ or _synaptic_ to find program names or to have access to them more easily.
 
 If you have a problem in the installation or with a dependence issue, you just need to run a separated script again or remove the dependence and install again with the flag `-i`. 
 
-If you want to use another wallpaper changer instead of nitrogen you can do it. I recommend that you use a dark theme for better look and feel and change the wallpaper, for this use the command `nitrogen /your/path/ --set-zoom-fill` or `nitrogen /usr/share/backgrounds/linuxmint-tina/`.
+If you want to use another wallpaper changer instead of _nitrogen_ you can do it. I recommend that you use a dark theme for better look and feel and change the wallpaper, for this use the command `nitrogen /your/path/ --set-zoom-fill` or `nitrogen /usr/share/backgrounds/linuxmint-tina/`.
 
 ## Uninstallation
 
