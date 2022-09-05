@@ -1,63 +1,66 @@
-#!/bin/bash
+#!/bin/sh
 
-dir=~/mint_i3wm
+deps="nitrogen rxvt-unicode feh screenfetch scrot imagemagick i3lock"
+way=$(pwd)
 reset=$(tput sgr0)
 highlight=$(tput setaf 6)
 
-if [ $1 == '-i' ] 2> /dev/null
+[ "$1" ] && flag="$1" || flag='-i'
+
+if [ "$flag" = '-i' ] 2> /dev/null
 then
-	sudo apt install nitrogen rxvt-unicode feh screenfetch scrot imagemagick i3lock -y
+	sudo apt install $deps -y
 
 	echo "${highlight}Configuring terminal${reset}"
-	cp $dir/rxvtconf ~/.Xresources
+	cp -v $way/rxvtconf ~/.Xresources
 
 	echo "${highlight}Configuring editor${reset}"
-	curl https://getmic.ro | bash
-	sudo mv micro /usr/bin/
+	cd /usr/local/bin/
+	curl https://getmic.ro/r | sudo bash
+	cd $way
 
 	echo "${highlight}Configuring background wallpaper"
 	echo 'Default path is /usr/share/backgrounds/linuxmint/'
 	echo 'If you want to change the path after the installation type in terminal "nitrogen /your/path --set-zoom-fill"'
 	echo "${reset}"
 	sleep 0.5
-	nitrogen /usr/share/backgrounds/linuxmint/default_background.jpg --set-zoom-fill
+	nitrogen /usr/share/backgrounds/linuxmint/default_background.jpg --set-zoom-fill --save 2> /dev/null
 
-	cp ~/.profile ~/.profile.bak
-	cp $dir/profile ~/.profile
+	cp -v ~/.profile ~/.profile.bak
+	cp -v $way/profile ~/.profile
 
 	echo "${highlight}Configuring lock screen${reset}"
 
 	# This part is based on http://plankenau.com/blog/post/gaussianlock blurred lock screen tutorial
 
-	echo '#!/bin/bash' >> $dir/lock
-	echo 'if [ ! -d ~/wallpapers ]' >> $dir/lock
-	echo 'then' >> $dir/lock
-	echo '    mkdir ~/wallpapers' >> $dir/lock
-	echo 'fi' >> $dir/lock
-	echo 'scrot ~/wallpapers/screenshot.png' >> $dir/lock
-	echo 'convert ~/wallpapers/screenshot.png -blur 0x9 ~/wallpapers/screenshotblurred.png' >> $dir/lock
-	echo 'i3lock -i ~/wallpapers/screenshotblurred.png' >> $dir/lock
-	echo 'rm ~/wallpapers/screenshotblurred.png' >> $dir/lock
+	echo '#!/bin/bash' >> lock
+	echo 'scrot /tmp/screenshot.png' >> lock
+	echo 'convert /tmp/screenshot.png -blur 0x9 /tmp/screenshotblurred.png' >> lock
+	echo 'i3lock -i /tmp/screenshotblurred.png' >> lock
+	echo 'rm /tmp/screenshotblurred.png' >> lock
+	echo 'rm /tmp/screenshot.png' >> lock
 
-	chmod +x $dir/lock
-	sudo mv $dir/lock /bin/
+	chmod +x lock
+	sudo mv -v lock /bin/
 
-elif [ $1 == '-u' ] 2> /dev/null
+elif [ "$flag" = '-u' ] 2> /dev/null
 then
-	sudo apt remove nitrogen rxvt-unicode feh screenfetch scrot imagemagick i3lock -y
-	
-	echo "${highlight}Restoring terminal${reset}"
-	rm ~/.Xresources
 
-	echo "${highlight}Restoring editor${reset}"
-	sudo rm /usr/bin/micro
+	sudo apt remove $deps -y
+
+	echo "${highlight}Restoring terminal${reset}"
+	rm -v ~/.Xresources
+
+	echo "${highlight}Deconfiguring editor${reset}"
+	sudo rm -v /usr/local/bin/micro
 
 	echo "${highlight}Restoring profile${reset}"
-	rm ~/.profile
-	mv ~/.profile.bak ~/.profile
+	rm -v ~/.profile
+	mv -v ~/.profile.bak ~/.profile
 
 	echo "${highlight}Deconfiguring lock screen${reset}"
-	sudo rm /bin/lock
+	sudo rm -v /bin/lock
+
 else
-	echo "${highlight}Don't forget to use a flag (-i or -u).${reset}"
+	echo "${highlight}Invalid flag, please use a valid one (-i or -u).${reset}"
 fi

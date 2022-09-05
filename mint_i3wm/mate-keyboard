@@ -1,0 +1,2 @@
+[/]
+options=['grp\tgrp:win_space_toggle', 'terminate\tterminate:ctrl_alt_bksp', 'altwin\taltwin:hyper_win']

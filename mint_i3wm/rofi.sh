@@ -1,41 +1,35 @@
-#!/bin/bash
+#!/bin/sh
 
-dir=~/mint_i3wm
+[ "$1" ] && flag="$1" || flag='-i'
 
-if [ $1 == '-i' ] 2> /dev/null
+way=$(pwd)
+if [ "$flag" = '-i' ] 2> /dev/null
 then
 
 	sudo apt install rofi suckless-tools -y
 
-	if [ ! -f ~/.rofirc ]
-	then
-    	echo 'export XDG_USER_CONFIG_DIR=~/.config/rofi/config' >> ~/.rofirc
-	fi
+	[ ! -f ~/.rofirc ] &&
+	 echo 'export XDG_USER_CONFIG_DIR=~/.config/rofi/config' >> ~/.rofirc
 
-	source ~/.rofirc
+	. ~/.rofirc
 
-    if [ ! -d ~/.config/rofi ]
-    then
-        mkdir ~/.config/rofi
-    fi
+    [ ! -d ~/.config/rofi ] && mkdir ~/.config/rofi
     
 	echo 'rofi.combi-modi: window,run' >> ~/.config/rofi/config
 	echo 'rofi.modi: combi' >> ~/.config/rofi/config
 	echo 'rofi.theme: ~/.config/rofi/look-n-feel.rasi' >> ~/.config/rofi/config
 
-	cp $dir/roficonf ~/.config/rofi/look-n-feel.rasi
+	cp -v $way/roficonf ~/.config/rofi/look-n-feel.rasi
 	
-elif [ $1 == '-u' ] 2> /dev/null
+elif [ "$flag" = '-u' ] 2> /dev/null
 then
 
 	sudo apt remove rofi suckless-tools -y
 
-	if [ -f ~/.rofirc ]
-	then
-		rm ~/.rofirc
-	fi
+	[ -f ~/.rofirc ] && rm -v ~/.rofirc
 
-	rm -rf ~/.config/rofi
+	rm -rfv ~/.config/rofi
+
 else
-    echo "${highlight}Don't forget to use a flag (-i or -u).${reset}"
+    echo "${highlight}Invalid flag, please use a valid one (-i or -u).${reset}"
 fi

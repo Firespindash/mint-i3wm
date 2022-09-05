@@ -1,121 +1,141 @@
-#!/bin/bash
+#!/bin/sh
 
-if [ $UID -eq 0 ]
-then
-    echo "Please don't run this program as root user!"
-fi
+[ "$(id -u)" = "0" ] && echo "Please don't run this program as root user!"
 
-read -p "Just run specific part?[Y/N] " part
+read -p "Just run desktop part? [y/n] " part
 
-dir=~/mint_i3wm
+way=$(pwd)
 reset=$(tput sgr0)
 highlight=$(tput setaf 6)
 
-if [ ! $part == 'Y' ]
+if [ ! "$part" = 'y' ]
 then
-    
     echo "${highlight}Installing i3-gaps wm${reset}"
-    chmod +x $dir/i3.sh
-    source $dir/i3.sh -i
+    . $way/i3.sh -i
 
     echo "${highlight}Installing compton compositor forked version${reset}"
-    chmod +x $dir/compton.sh
-    source $dir/compton.sh -i
+    . $way/compton.sh -i
 
     echo "${highlight}Installing rofi menu${reset}"
-    chmod +x $dir/rofi.sh
-    source $dir/rofi.sh -i
+    . $way/rofi.sh -i
 
     echo "${highlight}Installing extra programs${reset}"
-    chmod +x $dir/extra.sh
-    source $dir/extra.sh -i
+    . $way/extra.sh -i
 fi
 
-if [ $XDG_CURRENT_DESKTOP == 'X-Cinnamon' ]
+echo "${highlight}Setting desktop specific configurations${reset}"
+if [ $XDG_CURRENT_DESKTOP = 'X-Cinnamon' ]
 then
-    
-    git clone https://github.com/jbbr/i3-cinnamon.git
 
-    cd i3-cinnamon/
+	cd /tmp
+    [ ! -d /tmp/i3-cinnamon ] && { git clone https://github.com/jbbr/i3-cinnamon.git; \
+    cd i3-cinnamon; sudo make install; }
+    cd $way
 
-    sudo make install
+	deadd_latest=$(curl -Ls -o /dev/null -w %{url_effective} https://github.com/phuhl/linux_notification_center/releases/latest | cut -d '/' -f 8)
+	curl -Ls https://github.com/phuhl/linux_notification_center/releases/download/${deadd_latest}/deadd-notification-center -o deadd-notification-center
+	chmod +x deadd-notification-center && sudo mv -v deadd-notification-center /usr/local/bin/
 
-    echo "${highlight}Now reboot your machine.${reset}"
+    [ ! -d ~/.config/deadd ] && mkdir -v ~/.config/deadd ||
+      cp -rv ~/.config/deadd ~/.config/deadd.bak 
+
+    cp -v $way/deadd.conf ~/.config/deadd/
+
+    echo "${highlight}When you log out, a ball will appear close to the input, click there and change to 'Cinnamon + i3'.${reset}"
 
 fi
 
-if [ $XDG_CURRENT_DESKTOP == 'MATE' ]
+if [ $XDG_CURRENT_DESKTOP = 'MATE' ]
 then
 
-    cp $dir/mate_i3 ~/.i3/config
+    cp -v $way/mate_i3 ~/.i3/config
 
     dconf write /org/mate/desktop/session/required-components/windowmanager "'i3'"
     dconf write /org/mate/desktop/background/show-desktop-icons "false"
 
-    tput setaf 6
+    dconf load /org/mate/desktop/peripherals/keyboard/kbd/ < $way/mate-keyboard
+    dconf load /org/mate/panel/ < $way/mate-panel
 
-    echo 'Now to finish the installation, open the "Keyboard Preferences", go to "Layouts", click in "Options" button, click on "Alt/Win key behavior" submenu and change from "Default" to "Hyper is mapped to Win" next to the bottom option.'
+    cd /tmp
+    [ ! -d /tmp/mate-i3-applet ] && git clone https://github.com/city41/mate-i3-applet.git
+    cd mate-i3-applet/
+    sudo ./setup.py install
+    killall mate-panel
+    cd $way
 
-    echo "Then reboot your machine."
-    tput sgr0
-    
 fi
 
-if [ $XDG_CURRENT_DESKTOP == 'XFCE' ]
+if [ $XDG_CURRENT_DESKTOP = 'XFCE' ]
 then
 
-    cp $dir/xfce_i3 ~/.i3/config
+	sudo apt install xfce4-dev-tools json-glib-tools libjson-glib-dev libgtk2.0-dev gtk-doc-tools libxfce4ui-1-dev \
+	 libxfce4ui-2-dev gobject-introspection libxfce4panel-2.0-dev -y
 
-    nitrogen /usr/share/backgrounds/linuxmint/default_background.jpg --set-zoom-fill
+    cd /tmp
+    git clone https://github.com/acrisci/i3ipc-glib.git
+    cd i3ipc-glib
+    sudo ./autogen.sh --prefix=/usr
+    sudo make
+    sudo make install
+    cd ..
+    cd /tmp/xfce4-i3-workspaces-plugin
+    git clone https://github.com/denesb/xfce4-i3-workspaces-plugin.git
+    cd xfce4-i3-workspaces-plugin
+    sudo ./autogen.sh --prefix=/usr
+    sudo make
+    sudo make install
+    cd $way
+
+    cp -v $way/xfce_i3 ~/.i3/config
+
+	dir=~/.config/autostart
 
     if [ -f ~/.config/autostart/xfdesktop.desktop ]
     then
-        cd ~/.config/autostart/
-        cp xfdesktop.desktop xfdesktop-desktop.bak
-        rm xfdesktop.desktop
+        cp -v $dir/xfdesktop.desktop $dir/xfdesktop-desktop.bak
+        rm -v $dir/xfdesktop.desktop
     fi
-    
-    cd ~/
     
     if [ -f ~/.config/autostart/xfwm4.desktop ]
     then
-        cd ~/.config/autostart/
-        cp xfwm4.desktop xfwm4-desktop.bak
-        rm xfwm4.desktop
+        cp -v $dir/xfwm4.desktop $dir/xfwm4-desktop.bak
+        rm -v $dir/xfwm4.desktop
     fi
 
-    echo '[Desktop Entry]' >> $dir/i3.desktop
-    echo 'Encoding=UTF-8' >> $dir/i3.desktop
-    echo "Version=$(i3 --version | cut -d ' ' -f 3 | cut -d '-' -f 1)" >> $dir/i3.desktop
-    echo 'Type=Application' >> $dir/i3.desktop
-    echo 'Name=i3' >> $dir/i3.desktop
-    echo 'Comment=' >> $dir/i3.desktop
-    echo 'Exec=i3' >> $dir/i3.desktop
-    echo 'OnlyShowIn=XFCE;' >> $dir/i3.desktop
-    echo 'RunHook=0' >> $dir/i3.desktop
-    echo 'StartupNotify=false' >> $dir/i3.desktop
-    echo 'Terminal=false' >> $dir/i3.desktop
-    echo 'Hidden=false' >> $dir/i3.desktop
+    echo '[Desktop Entry]' >> i3.desktop
+    echo 'Encoding=UTF-8' >> i3.desktop
+    echo "Version=$(i3 --version | cut -d ' ' -f 3 | cut -d '-' -f 1)" >> i3.desktop
+    echo 'Type=Application' >> i3.desktop
+    echo 'Name=i3' >> i3.desktop
+    echo 'Comment=' >> i3.desktop
+    echo 'Exec=i3' >> i3.desktop
+    echo 'OnlyShowIn=XFCE;' >> i3.desktop
+    echo 'RunHook=0' >> i3.desktop
+    echo 'StartupNotify=false' >> i3.desktop
+    echo 'Terminal=false' >> i3.desktop
+    echo 'Hidden=false' >> i3.desktop
     
-    sudo chmod +x $dir/i3.desktop
+    sudo chmod +x i3.desktop
     
-    if [ ! -d ~/.config/autostart ]
-    then
-        mkdir ~/.config/autostart
-    fi
-    
-    mv $dir/i3.desktop ~/.config/autostart/
-    
-    tput setaf 6
-    echo 'Open the "Session and Startup", go to "Session" tab and change "xfwm4" and "xfdesktop" from "Immediately" to "Never", click on "Save session" and click on "Close" button.'
-    sleep 2
-    
-    echo 'Now open "Keyboard", go to "Application Shortcuts" tab and remove all keyboard shortcuts(you can hold shift to select all of them more quickly), then click on "Close" button.'
-    sleep 2
+    [ ! -d ~/.config/autostart ] && mkdir ~/.config/autostart
+        
+    mv -v i3.desktop ~/.config/autostart/
 
-    echo 'Now reboot your machine.'
-    echo 'When you restart your machine go to terminal and type "nitrogen /your/path --set-zoom-fill" to put a background image.'
-    tput sgr0
+	killall xfconfd
+    
+    xfconf-query -c xfce4-session -p /sessions/Failsafe/Client0_Command -t string -sa xfsettingsd
+    xfconf-query -c xfce4-session -p /sessions/Failsafe/Client1_Command -t string -sa i3
+    sudo rm -v /usr/bin/xfdesktop
+        
+    [ -f ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.xml ] &&
+	  cp -v ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.xml ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.bak	
+
+    cp -v $way/xfce4-keyboard-shortcuts.xml ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.xml
+
+	killall xfdesktop && nitrogen /usr/share/backgrounds/linuxmint/ktee_linuxmint.png --set-zoom-fill --save
+	xfconf-query -c xfce4-panel -p /plugins/plugin-9 -t string -s i3-workspaces
+	xfce4-panel -r
 
 fi
 
+echo "${highlight}Now log out and log in again.${reset}"

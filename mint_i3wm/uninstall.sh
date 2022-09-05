@@ -1,86 +1,94 @@
-#!/bin/bash
+#!/bin/sh
 
-if [ $UID -eq 0 ]
-then
-	echo "Please don't run this program as root user!"
-fi
+[ "$(id -u)" = "0" ] && echo "Please don't run this program as root user!"
 
-read -p "Just uninstall specific programs?[Y/N] " specific
+read -p "Just uninstall desktop configs? [y/n] " specific
 
-dir=~/mint_i3wm
+way=$(pwd)
 reset=$(tput sgr0)
 highlight=$(tput setaf 6)
+message="Now reboot your machine."
 
-if [ ! $specific == 'Y' ]
+if [ ! "$specific" = 'y' ]
 then
 	echo "${highlight}Uninstalling i3-gaps wm${reset}"
-	chmod +x $dir/i3.sh
-	source $dir/i3.sh -u
+	. $way/i3.sh -u
 
 	echo "${highlight}Uninstalling compton compositor forked version${reset}"
-	chmod +x $dir/compton.sh
-	source $dir/compton.sh -u
+	. $way/compton.sh -u
 
 	echo "${highlight}Uninstalling rofi menu${reset}"
-	chmod +x $dir/rofi.sh
-	source $dir/rofi.sh -u
+	. $way/rofi.sh -u
 
 	echo "${highlight}Uninstalling extra programs${reset}"
-	chmod +x $dir/extra.sh
-	source $dir/extra.sh -u	
+	. $way/extra.sh -u	
 fi
 
-if [ $XDG_CURRENT_DESKTOP == 'X-Cinnamon' ]
+echo "${highlight}Unsetting desktop specific configurations${reset}"
+if [ $XDG_CURRENT_DESKTOP = 'X-Cinnamon' ]
 then
-    if [ -d i3-cinnamon ]
-    then
-    	rm -rf i3-cinnamon
-    fi
-    
-	git clone https://github.com/jbbr/i3-cinnamon.git
 
-	cd i3-cinnamon/
+	sudo rm -v /usr/bin/i3*
 
-	sudo make install
-	sudo make uninstall
+	rm -rfv ~/.config/deadd
+
+	[ -d ~/.config/deadd.bak ] && mv -v ~/.config/deadd.bak ~/.config/deadd 
+
+	sudo rm -v /usr/local/bin/deadd-notification-center
+
 	
-    cd ../
-	
-    rm -rf i3-cinnamon/
-
-	echo "${highlight}Now reboot your machine.${reset}"
-
 fi
 
-if [ $XDG_CURRENT_DESKTOP == 'MATE' ]	
+if [ $XDG_CURRENT_DESKTOP = 'MATE' ]	
 then
 
 	dconf write /org/mate/desktop/session/required-components/windowmanager "'marco'"
 	dconf write /org/mate/desktop/background/show-desktop-icons "true"
 
-	tput setaf 6
-	echo 'To finish the uninstallation, open the "Keyboard Preferences", go to "Layouts", click in "Options" button, click on "Alt/Win key behavior" submenu and change from "Hyper is mapped to Win" to "Default" on the top option.'
+	resetKeys="$(sed "s/, 'altwin.*//;s/options=//" mate-keyboard | awk 'NR==2')]"
 
-	echo "Then reboot your machine."
-	tput sgr0
+	dconf write /org/mate/desktop/peripherals/keyboard/kbd/options "$resetKeys"
+
+    mate-panel --reset
+
+	sudo rm -rfv /usr/lib/mate-i3-applet /usr/share/dbus-1/services/matei3applet.service
+	sudo rm -v /usr/share/mate-panel/applets/matei3applet.mate-panel-applet /usr/local/lib/python3.8/dist-packages/mate_i3_applet-*
+
+	notify-send "mint-i3wm" "$message" --expire-time=7000 --icon=utilities-terminal
 	
 fi
 
-if [ $XDG_CURRENT_DESKTOP == 'XFCE' ]
+if [ $XDG_CURRENT_DESKTOP = 'XFCE' ]
 then
 
-	rm ~/.config/autostart/i3.desktop 2> /dev/null
+	rm -v ~/.config/autostart/i3.desktop 2> /dev/null
 
-	tput setaf 6
-	echo 'Open "Session and Startup", go to "Saved sessions" tab and click on "Clear saved sessions" button or select the "Default" session and click on "-" button, then click on "Close" button.'
-	sleep 2
+	cd /tmp/i3ipc-glib || cd /tmp && { \
+	 git clone https://github.com/acrisci/i3ipc-glib.git; \
+	 cd i3ipc-glib; sudo ./autogen.sh --prefix=/usr; sudo make; \ 
+	 sudo make install; }
+    cd ..
+	cd /tmp/xfce4-i3-workspaces-plugin || { \
+	 git clone https://github.com/denesb/xfce4-i3-workspaces-plugin.git; \
+	 cd xfce4-i3-workspaces-plugin; sudo ./autogen.sh --prefix=/usr; \
+	 sudo make; sudo make install; }
+	sudo make uninstall
+	cd ..
+	cd i3ipc-glib && sudo make uninstall
+	sudo rm -rfv /tmp/{i3pc-glib,xfce4-i3-workspaces-plugin}
+	cd $way
 
-	echo 'To restore keyboard shortucuts, you can open "Keyboard", go to "Application Shortcuts" tab and add all keyboard shortcuts you want to.'
-	sleep 1
+	killall xfconfd
 
-	echo 'Now reboot your machine.'
-	tput sgr0
+	cp -v ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.bak ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.xml
+
+	sudo apt reinstall xfdesktop4 -y
+
+	xfconf-query -c xfce4-session -p /sessions/Failsafe -r
+	xfconf-query -c xfce4-session -p /sessions/Failsafe/Client0_Command -t string -sa 'xfwm4'
+	xfconf-query -c xfce4-panel -p /plugins/plugin-9 -t string -s ''
+	xfce4-panel -r
 	
 fi
 
-	
+echo "${highlight}$message${reset}"
