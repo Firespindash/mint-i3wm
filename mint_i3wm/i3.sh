@@ -1,4 +1,5 @@
 #!/bin/sh
+#!/bin/sh
 
 # This is an automated script of 
 # "https://benjames.io/2017/09/03/installing-i3-gaps-on-ubuntu-16-04/" 
@@ -35,7 +36,7 @@ then
 	 libxcb-icccm4-dev libyajl-dev libstartup-notification0-dev \
 	 libxcb-randr0-dev libev-dev libxcb-cursor-dev libxcb-xinerama0-dev \
 	 libxcb-xkb-dev libxkbcommon-dev libxkbcommon-x11-dev xutils-dev \
-	 libxcb-shape0-dev autoconf i3status -y
+	 libxcb-shape0-dev autoconf i3status asciidoc -y
 
 	cd /tmp
 	buildXcbXrm

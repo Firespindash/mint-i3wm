@@ -1,5 +1,5 @@
 # mint_i3wm
-It's a script that install _i3_ with blur effects in your _Linux Mint_
+It's a script that install _i3_ with blur effects in your _Linux Mint_.
 
 ![Cinnamon](cinnamon.jpg)
 
@@ -7,7 +7,7 @@ It's a script that install _i3_ with blur effects in your _Linux Mint_
 
 * After cloning, go to the terminal;
 * type `cd mint_i3wm`; 
-* and run `./install.sh`;
+* and run `./install.sh`
 
 It was tested on _Linux Mint_ 19, 20 and 21. \
 Don't type 'Y' when the question "Just run desktop part? [Y/n] " appears, just use it if something goes wrong on the final of the installation. \
@@ -31,7 +31,7 @@ I recommend that you use a dark theme for better look and feel and change the wa
 ## Uninstallation
 
 * If you haven't anymore, clone it again;
-* go to terminal, type `cd mint_i3wm` and run `./uninstall.sh`;
+* go to terminal, type `cd mint_i3wm` and run `./uninstall.sh`
 
 You can type 'Y' when the question "Just run desktop part?[Y/N] " appears, to remove only the desktop specific configurations applied. You can also uninstall or some programs using the separated scripts with the flag `-u`. \
 Some programs are compiled again to uninstall them. Keep in mind, that if you move to other places or rename some directories and files, the script will not uninstall them. \

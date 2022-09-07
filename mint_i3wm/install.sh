@@ -68,7 +68,7 @@ fi
 if [ $XDG_CURRENT_DESKTOP = 'XFCE' ]
 then
 
-	sudo apt install xfce4-dev-tools json-glib-tools libjson-glib-dev libgtk2.0-dev gtk-doc-tools libxfce4ui-1-dev \
+	sudo apt install xfce4-dev-tools json-glib-tools libjson-glib-dev libgtk2.0-dev gtk-doc-tools \
 	 libxfce4ui-2-dev gobject-introspection libxfce4panel-2.0-dev -y
 
     cd /tmp
@@ -78,7 +78,6 @@ then
     sudo make
     sudo make install
     cd ..
-    cd /tmp/xfce4-i3-workspaces-plugin
     git clone https://github.com/denesb/xfce4-i3-workspaces-plugin.git
     cd xfce4-i3-workspaces-plugin
     sudo ./autogen.sh --prefix=/usr

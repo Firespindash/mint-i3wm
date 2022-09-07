@@ -33,7 +33,7 @@ then
 
 	# This part is based on http://plankenau.com/blog/post/gaussianlock blurred lock screen tutorial
 
-	echo '#!/bin/bash' >> lock
+	echo '#!/bin/sh' >> lock
 	echo 'scrot /tmp/screenshot.png' >> lock
 	echo 'convert /tmp/screenshot.png -blur 0x9 /tmp/screenshotblurred.png' >> lock
 	echo 'i3lock -i /tmp/screenshotblurred.png' >> lock
