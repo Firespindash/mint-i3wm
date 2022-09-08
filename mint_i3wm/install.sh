@@ -27,17 +27,17 @@ echo "${highlight}Setting desktop specific configurations${reset}"
 if [ $XDG_CURRENT_DESKTOP = 'X-Cinnamon' ]
 then
 
-	cd /tmp
+    cd /tmp
     [ ! -d /tmp/i3-cinnamon ] && { git clone https://github.com/jbbr/i3-cinnamon.git; \
     cd i3-cinnamon; sudo make install; }
     cd $way
 
-	deadd_latest=$(curl -Ls -o /dev/null -w %{url_effective} https://github.com/phuhl/linux_notification_center/releases/latest | cut -d '/' -f 8)
-	curl -Ls https://github.com/phuhl/linux_notification_center/releases/download/${deadd_latest}/deadd-notification-center -o deadd-notification-center
-	chmod +x deadd-notification-center && sudo mv -v deadd-notification-center /usr/local/bin/
+    deadd_latest=$(curl -Ls -o /dev/null -w %{url_effective} https://github.com/phuhl/linux_notification_center/releases/latest | cut -d '/' -f 8)
+    curl -Ls https://github.com/phuhl/linux_notification_center/releases/download/${deadd_latest}/deadd-notification-center -o deadd-notification-center
+    chmod +x deadd-notification-center && sudo mv -v deadd-notification-center /usr/local/bin/
 
     [ ! -d ~/.config/deadd ] && mkdir -v ~/.config/deadd ||
-      cp -rv ~/.config/deadd ~/.config/deadd.bak 
+      cp -rv ~/.config/deadd ~/.config/deadd.bak
 
     cp -v $way/deadd.conf ~/.config/deadd/
 
@@ -68,8 +68,8 @@ fi
 if [ $XDG_CURRENT_DESKTOP = 'XFCE' ]
 then
 
-	sudo apt install xfce4-dev-tools json-glib-tools libjson-glib-dev libgtk2.0-dev gtk-doc-tools \
-	 libxfce4ui-2-dev gobject-introspection libxfce4panel-2.0-dev -y
+    sudo apt install xfce4-dev-tools json-glib-tools libjson-glib-dev libgtk2.0-dev gtk-doc-tools \
+     libxfce4ui-2-dev gobject-introspection libxfce4panel-2.0-dev -y
 
     cd /tmp
     git clone https://github.com/acrisci/i3ipc-glib.git
@@ -87,7 +87,7 @@ then
 
     cp -v $way/xfce_i3 ~/.i3/config
 
-	dir=~/.config/autostart
+    dir=~/.config/autostart
 
     if [ -f ~/.config/autostart/xfdesktop.desktop ]
     then
@@ -120,20 +120,20 @@ then
         
     mv -v i3.desktop ~/.config/autostart/
 
-	killall xfconfd
+    killall xfconfd
     
     xfconf-query -c xfce4-session -p /sessions/Failsafe/Client0_Command -t string -sa xfsettingsd
     xfconf-query -c xfce4-session -p /sessions/Failsafe/Client1_Command -t string -sa i3
     sudo rm -v /usr/bin/xfdesktop
         
     [ -f ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.xml ] &&
-	  cp -v ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.xml ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.bak	
+      cp -v ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.xml ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.bak
 
     cp -v $way/xfce4-keyboard-shortcuts.xml ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.xml
 
-	killall xfdesktop && nitrogen /usr/share/backgrounds/linuxmint/ktee_linuxmint.png --set-zoom-fill --save
-	xfconf-query -c xfce4-panel -p /plugins/plugin-9 -t string -s i3-workspaces
-	xfce4-panel -r
+    killall xfdesktop && nitrogen /usr/share/backgrounds/linuxmint/ktee_linuxmint.png --set-zoom-fill --save
+    xfconf-query -c xfce4-panel -p /plugins/plugin-9 -t string -s i3-workspaces
+    xfce4-panel -r
 
 fi
 
