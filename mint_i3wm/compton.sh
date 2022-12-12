@@ -20,7 +20,7 @@ then
      libgl1-mesa-dev libxcomposite-dev libxdamage-dev libxfixes-dev \
      libxext-dev libxrender-dev libxrandr-dev libxinerama-dev pkg-config \
      make x11proto-core-dev x11-utils libpcre3 libpcre3-dev libconfig-dev \
-     libdrm-dev libgl1-mesa-glx libdbus-1-dev asciidoc -y 
+     libdrm-dev libgl1-mesa-glx libdbus-1-dev asciidoc -y
 
     cd /tmp
     compileCompton
@@ -35,7 +35,8 @@ elif [ "$flag" = '-u' ] 2> /dev/null
 then
 
     cd /tmp
-    cd compton/ 2> /dev/null || compileCompton
+    [ ! -d /tmp/compton ] && compileCompton
+    cd compton/
     sudo make uninstall
     cd $way
 

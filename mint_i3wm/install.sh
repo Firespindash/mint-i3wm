@@ -41,7 +41,7 @@ then
 
     cp -v $way/deadd.conf ~/.config/deadd/
 
-    echo "${highlight}When you log out, a ball will appear close to the input, click there and change to 'Cinnamon + i3'.${reset}"
+    echo "${highlight}When you log out, a circle will appear close to the input, click there and change to 'Cinnamon + i3'.${reset}"
 
 fi
 
@@ -94,7 +94,7 @@ then
         cp -v $dir/xfdesktop.desktop $dir/xfdesktop-desktop.bak
         rm -v $dir/xfdesktop.desktop
     fi
-    
+
     if [ -f ~/.config/autostart/xfwm4.desktop ]
     then
         cp -v $dir/xfwm4.desktop $dir/xfwm4-desktop.bak
@@ -113,19 +113,19 @@ then
     echo 'StartupNotify=false' >> i3.desktop
     echo 'Terminal=false' >> i3.desktop
     echo 'Hidden=false' >> i3.desktop
-    
+
     sudo chmod +x i3.desktop
-    
+
     [ ! -d ~/.config/autostart ] && mkdir ~/.config/autostart
-        
+
     mv -v i3.desktop ~/.config/autostart/
 
     killall xfconfd
-    
+
     xfconf-query -c xfce4-session -p /sessions/Failsafe/Client0_Command -t string -sa xfsettingsd
     xfconf-query -c xfce4-session -p /sessions/Failsafe/Client1_Command -t string -sa i3
     sudo rm -v /usr/bin/xfdesktop
-        
+
     [ -f ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.xml ] &&
       cp -v ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.xml ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.bak
 
